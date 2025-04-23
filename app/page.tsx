@@ -30,12 +30,6 @@ export default function LandingPage() {
               Contact
             </Link>
           </nav>
-          <div>
-            <Button variant="outline" className="mr-2">
-              Log in
-            </Button>
-            <Button>Sign up</Button>
-          </div>
         </div>
       </header>
 
