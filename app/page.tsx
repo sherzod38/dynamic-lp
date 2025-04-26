@@ -1,12 +1,21 @@
-import { BookOpen, Users, Calendar, MapPin } from "lucide-react"
+import { createClient } from '@supabase/supabase-js'
+import { BookOpen, Calendar, MapPin, Users } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import HeroCarousel from "@/components/hero-carousel"
 import FeatureCard from "@/components/feature-card"
 import TestimonialCard from "@/components/testimonial-card"
+import { About } from "@/components/about"
+import { CarouselItem } from "@/types/carousel"
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+  const {data: carouselItems} = await supabase.from("carousel_items").select("*");
+  const items = (carouselItems ?? []) as CarouselItem[];
+  console.log(items);
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -35,7 +44,7 @@ export default function LandingPage() {
 
       {/* Hero Section with Carousel */}
       <section className="relative">
-        <HeroCarousel />
+        <HeroCarousel items={items} />
       </section>
 
       {/* Features Section */}
@@ -70,33 +79,7 @@ export default function LandingPage() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20">
-        <div className="container">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-4">About Our Learning Center</h2>
-              <p className="text-gray-600 mb-6">
-                Founded in 2015, our learning center has helped thousands of students achieve their educational goals
-                through personalized instruction and a supportive learning environment.
-              </p>
-              <p className="text-gray-600 mb-6">
-                We believe that everyone has the potential to excel when given the right resources and guidance. Our
-                mission is to provide accessible, high-quality education that empowers learners of all ages.
-              </p>
-              <Button size="lg">Learn More About Us</Button>
-            </div>
-            <div className="relative h-[400px] rounded-lg overflow-hidden">
-              <Image
-                src="/placeholder.svg?height=400&width=600"
-                alt="Learning center interior"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <About />
       {/* Testimonials Section */}
       <section id="testimonials" className="py-20 bg-gray-50">
         <div className="container">

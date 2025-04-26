@@ -4,41 +4,22 @@ import { useState, useEffect, JSX, SVGProps } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "../components/ui/button"
 import Image from "next/image"
+import Link from "next/link"
+import { CarouselItem } from "@/types/carousel"
 
-const carouselItems = [
-  {
-    id: 1,
-    title: "Welcome to Our Learning Center",
-    description: "A place where knowledge meets opportunity. Discover your potential with our expert-led courses.",
-    image: "/placeholder.svg?height=600&width=1200",
-    cta: "Explore Courses",
-  },
-  {
-    id: 2,
-    title: "Learn at Your Own Pace",
-    description:
-      "Flexible schedules designed to fit your busy lifestyle. Morning, afternoon, and evening sessions available.",
-    image: "/placeholder.svg?height=600&width=1200",
-    cta: "View Schedule",
-  },
-  {
-    id: 3,
-    title: "State-of-the-Art Facilities",
-    description: "Modern classrooms, computer labs, and study areas designed to enhance your learning experience.",
-    image: "/placeholder.svg?height=600&width=1200",
-    cta: "Take a Tour",
-  },
-]
+type CarouselProps = {
+  items: CarouselItem[];
+};
 
-export default function HeroCarousel() {
+export default function HeroCarousel({items}: CarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === carouselItems.length - 1 ? 0 : prev + 1))
+    setCurrentSlide((prev) => (prev === items.length - 1 ? 0 : prev + 1))
   }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? carouselItems.length - 1 : prev - 1))
+    setCurrentSlide((prev) => (prev === 0 ? items.length - 1 : prev - 1))
   }
 
   // Auto-advance slides
@@ -61,7 +42,7 @@ export default function HeroCarousel() {
     <div className="relative h-[600px] overflow-hidden">
       {/* Carousel slides */}
       <div className="relative h-full">
-        {carouselItems.map((item, index) => (
+        {items.map((item, index) => (
           <div
             key={item.id}
             className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -74,7 +55,7 @@ export default function HeroCarousel() {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 max-w-4xl">{item.title}</h1>
               <p className="text-xl md:text-2xl mb-8 max-w-2xl">{item.description}</p>
               <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
-                {item.cta}
+               <Link href={item.cta_link}>{item.cta_text}</Link>
               </Button>
             </div>
           </div>
@@ -117,7 +98,7 @@ export default function HeroCarousel() {
 
       {/* Slide indicators */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex space-x-2">
-        {carouselItems.map((_, index) => (
+        {items.map((_, index) => (
           <button
             key={index}
             className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-white" : "bg-white/50"}`}
